@@ -1,0 +1,27 @@
+{
+  "name": "taxismartservice",
+  "version": "1.0.0",
+  "description": "Taxi for Spb",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ecom42",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "imagemin": "^7.0.1",
+    "imagemin-webp": "^6.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.27.0",
+    "mongodb": "^3.6.1",
+    "redis": "^3.0.2",
+    "shortid": "^2.2.15",
+    "socket.io": "^2.3.0",
+    "socketio-jwt": "^4.6.2"
+  }
+}
