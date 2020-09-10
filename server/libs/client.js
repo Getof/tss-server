@@ -12,7 +12,8 @@ module.exports = function (io) {
     }));
 
     io.sockets.on('connection', function (socket) {
-        socket.decoded_token.prefix === driverPrefix ? drivers[socket.decoded_token.id] = socket.id : riders[socket.decoded_token.id] = socket.id;
+        socket.decoded_token.prefix === driverPrefix ? drivers[socket.decoded_token.id] = 
+                            socket.id : riders[socket.decoded_token.id] = socket.id;
         // if (socket.decoded_token.prefix === driverPrefix) {
         //     //TODO:Well we need to know the size!
         //     //operatorsNamespace.emit("ChangeDriversOnline", drivers.size);
@@ -22,7 +23,9 @@ module.exports = function (io) {
         //     });
         // }
         if (socket.decoded_token.prefix === riderPrefix)
+        console.log('ID rider'+socket.decoded_token.id);        
             mongo.getIsInfoChanged(socket.decoded_token.id).then(function (isChanged) {
+                console.log(isChanged);
                 if (isChanged)
                     update.rider(io, socket.decoded_token.id);
             });

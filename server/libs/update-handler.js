@@ -13,6 +13,7 @@ module.exports = {
         await mongo.updateInfoChangedStatus(riderId, true);
         if (riders[riderId]) {
             let profile = await mongo.getProfile(riderId);
+            console.log(profile);
             io.to(riders[riderId]).emit('riderInfoChanged', profile);
             mongo.updateInfoChangedStatus(riderId, false);
         }

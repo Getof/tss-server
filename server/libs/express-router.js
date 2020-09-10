@@ -27,12 +27,38 @@ router.post('/rider_login', async (req, res) => {
     // let token = jwt.sign(keys, process.env.JWT_SECRET, {});
     // res.json({status: 200, token: token, user: profile});
     let profile = await mongo.getProfilePhone(req.body.user_name);
+    console.log(profile);
         let keys = {
-            id: profile._id,
+            id: profile.mobile_number,
             prefix: riderPrefix
         };
         let token = jwt.sign(keys, process.env.JWT_SECRET, {});
         res.json({status: 200, token: token, user: profile});
+    });
+router.post('/address', async (req, res) => {
+    var url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address";
+var token = "289cb36ec9fe6a88e2dc1d46cee06d9cca18b4f1";
+var query = { lat: req.body.lat, lon: req.body.lon };
+
+console.log('Response:'+req.body.lat);
+
+var options = {
+    method: "POST",
+    mode: "cors",
+    headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": "Token " + token
+    },
+    body: JSON.stringify(query)
+}
+res.json({status: req.body.lat});
+
+// fetch(url, options)
+// .then(response => response.text())
+// .then(result => console.log(result))
+// .catch(error => console.log("error", error));
+
     });
 
 

@@ -17,13 +17,13 @@ const RiderSchema  = mongoose.Schema({
         type: String,
         default: ''
     },
-    gender: {
-        type: String,
-        default: 'Неизвестно'
-    },
+    // gender: {
+    //     type: String,
+    //     default: 'Неизвестно'
+    // },
     balance: {
-        type: mongoose.Types.Decimal128,
-        default: 0.0
+        type: String,
+        default: '0.0'
     },
     status: {
         type: String,
