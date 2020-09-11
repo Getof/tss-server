@@ -20,21 +20,41 @@ router.post('/rider_login', async (req, res) => {
     //         res.json({status: 666, error: "Your access has been denied. Please contact app provider."});
     //         return;
     // }
-    // let keys = {
-    //     id: profile.id,
-    //     prefix: riderPrefix
-    // };
-    // let token = jwt.sign(keys, process.env.JWT_SECRET, {});
-    // res.json({status: 200, token: token, user: profile});
-    let profile = await mongo.getProfilePhone(req.body.user_name);
-    console.log(profile);
-        let keys = {
-            id: profile.mobile_number,
-            prefix: riderPrefix
-        };
-        let token = jwt.sign(keys, process.env.JWT_SECRET, {});
-        res.json({status: 200, token: token, user: profile});
+    await Rider.findOne({mobile_number: req.body.user_name}, {_id: 0, status: 0, info_changed: 0})
+        .then(data => {
+            if (!data) {
+                let rider = new Rider({
+                    mobile_number: req.body.user_name
+                });            
+                
+             rider.save()
+                     .then(data => {
+                         console.log(data);
+                        let keys = {
+                            id: req.body.user_name,
+                            prefix: riderPrefix
+                            };
+                        let token = jwt.sign(keys, process.env.JWT_SECRET, {});
+                        res.json({status: 200, token: token, user: data});
+                        return;
+                      })
+                     .catch(err => {
+                        res.json({status: 666, error: err});
+                        return;
+                      });
+            }
+            console.log(data);
+            let keys = {
+                id: req.body.user_name,
+                prefix: riderPrefix
+            };
+            let token = jwt.sign(keys, process.env.JWT_SECRET, {});
+            res.json({status: 200, token: token, user: data});
+            return;
+        });       
     });
+
+
 router.post('/address', async (req, res) => {
     var url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address";
 var token = "289cb36ec9fe6a88e2dc1d46cee06d9cca18b4f1";

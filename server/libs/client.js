@@ -23,13 +23,27 @@ module.exports = function (io) {
         //     });
         // }
         if (socket.decoded_token.prefix === riderPrefix)
-        console.log('ID rider'+socket.decoded_token.id);        
-            mongo.getIsInfoChanged(socket.decoded_token.id).then(function (isChanged) {
-                console.log(isChanged);
-                if (isChanged)
-                    update.rider(io, socket.decoded_token.id);
-            });
-
+        console.log('ID rider'+socket.decoded_token.id);
+        Rider.findOne({mobile_number: socket.decoded_token.id}).exec()
+        .then(data => {
+            let isChanged = !!(data.info_changed);            
+            if (isChanged) (
+                Rider.findOneAndUpdate({mobile_number: socket.decoded_token.id}, {info_changed: true}).exec()
+                .then(() => {
+                    if (riders[socket.decoded_token.id]){
+                        Rider.findOne({mobile_number: socket.decoded_token.id}).exec()
+                        .then(profile => {
+                            io.to(riders[socket.decoded_token.id]).emit('riderInfoChanged', profile);
+                            Rider.findOneAndUpdate({mobile_number: socket.decoded_token.id}, {info_changed: false}).exec()
+                            return;
+                        })
+                        return;
+                    }
+                })
+            );
+            return;
+        });       
+           
         // socket.on('disconnect', function () {
         //     if (socket.decoded_token.prefix === driverPrefix) {
         //         redis.deleteLocation(socket.decoded_token.id);
